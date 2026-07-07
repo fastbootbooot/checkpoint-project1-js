@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Core Lab - Devoir Maison</title>
+    <!-- Google Fonts: Outfit & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary-grad: linear-gradient(135deg, #818cf8, #c084fc);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent: #a78bfa;
+            --success: #34d399;
+            --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Decorative Background Orbs */
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+        body::before {
+            top: -100px;
+            left: -100px;
+        }
+        body::after {
+            bottom: -100px;
+            right: -100px;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1.5rem 2rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .github-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .github-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        main {
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 1.5rem 4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(129, 140, 248, 0.4);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(167, 139, 250, 0.2);
+        }
+
+        button {
+            width: 100%;
+            background: var(--primary-grad);
+            border: none;
+            border-radius: 10px;
+            padding: 0.9rem;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.25);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(129, 140, 248, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            border-left: 3px solid var(--accent);
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            word-break: break-all;
+            color: var(--success);
+        }
+
+        .result-val.empty {
+            color: var(--text-muted);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--card-border);
+            width: 100%;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- Include core functional logic script -->
+    <script src="reverse.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>JS Core Lab</h1>
+        <p>Devoir Maison (DM) Assignment — A curated collection of helper functions, built for performance and simplicity.</p>
+        <a href="#" class="github-badge">
+            <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+            Ready for GitHub
+        </a>
+    </header>
+
+    <main>
+        <!-- Card 1: String Reversal -->
+        <section class="card" id="card-reverse">
+            <div class="card-header">
+                <span class="card-num">Exercise 01</span>
+                <h2>String Reversal</h2>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <label for="reverse-input">Input String</label>
+                    <input type="text" id="reverse-input" placeholder="Type a word (e.g. hello)..." value="hello">
+                </div>
+                <button onclick="runReverse()">Reverse</button>
+                <div class="result-container">
+                    <span class="result-label">Result</span>
+                    <span id="reverse-result" class="result-val empty">No input yet</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 2: Find Maximum in Array -->
+        <section class="card" id="card-max">
+            <div class="card-header">
+                <span class="card-num">Exercise 02</span>
+                <h2>Max in Array</h2>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <label for="max-input">Comma-separated Numbers</label>
+                    <input type="text" id="max-input" placeholder="e.g. 1, 2, 40, 8, 100" value="1, 2, 40, 8, 100">
+                </div>
+                <button onclick="runMax()">Find Max</button>
+                <div class="result-container">
+                    <span class="result-label">Result</span>
+                    <span id="max-result" class="result-val empty">No input yet</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 3: Factorial -->
+        <section class="card" id="card-factorial">
+            <div class="card-header">
+                <span class="card-num">Exercise 03</span>
+                <h2>Factorial</h2>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <label for="factorial-input">Enter Integer</label>
+                    <input type="number" id="factorial-input" placeholder="e.g. 5" value="5" min="0" step="1">
+                </div>
+                <button onclick="runFactorial()">Calculate</button>
+                <div class="result-container">
+                    <span class="result-label">Result</span>
+                    <span id="factorial-result" class="result-val empty">No input yet</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 4: Prime Number Check -->
+        <section class="card" id="card-prime">
+            <div class="card-header">
+                <span class="card-num">Exercise 04</span>
+                <h2>Prime Check</h2>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <label for="prime-input">Enter Integer</label>
+                    <input type="number" id="prime-input" placeholder="e.g. 7" value="7" min="0" step="1">
+                </div>
+                <button onclick="runPrime()">Check Prime</button>
+                <div class="result-container">
+                    <span class="result-label">Result</span>
+                    <span id="prime-result" class="result-val empty">No input yet</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 5: Fibonacci Sequence -->
+        <section class="card" id="card-fibonacci">
+            <div class="card-header">
+                <span class="card-num">Exercise 05</span>
+                <h2>Fibonacci Sequence</h2>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <label for="fib-input">Number of Terms</label>
+                    <input type="number" id="fib-input" placeholder="e.g. 10" value="10" min="1" step="1">
+                </div>
+                <button onclick="runFibonacci()">Generate</button>
+                <div class="result-container">
+                    <span class="result-label">Result</span>
+                    <span id="fib-result" class="result-val empty">No input yet</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Core JS DM Hub. Neatly packaged for GitHub submission.</p>
+    </footer>
+
+    <!-- Browser Action Handlers linking the UI to the core functions -->
+    <script>
+        function updateResult(elementId, value, isEmpty = false) {
+            const el = document.getElementById(elementId);
+            if (isEmpty) {
+                el.classList.add('empty');
+                el.innerText = value;
+            } else {
+                el.classList.remove('empty');
+                el.innerText = typeof value === 'object' ? JSON.stringify(value) : value;
+            }
+        }
+
+        function runReverse() {
+            const inputVal = document.getElementById('reverse-input').value;
+            const res = reverse(inputVal);
+            updateResult('reverse-result', `"${res}"`);
+        }
+
+        function runMax() {
+            const inputVal = document.getElementById('max-input').value;
+            // Parse comma-separated string to list of numbers
+            const arr = inputVal.split(',')
+                                .map(item => item.trim())
+                                .filter(item => item !== "")
+                                .map(Number);
+                                
+            if (arr.some(isNaN)) {
+                updateResult('max-result', "Error: Invalid numbers in list", true);
+                return;
+            }
+            const res = Maxarry(arr);
+            updateResult('max-result', res !== null ? res : 'Empty list');
+        }
+
+        function runFactorial() {
+            const inputVal = parseInt(document.getElementById('factorial-input').value, 10);
+            if (isNaN(inputVal)) {
+                updateResult('factorial-result', "Error: Enter a valid integer", true);
+                return;
+            }
+            const res = factorial(inputVal);
+            updateResult('factorial-result', res !== null ? res : 'Invalid input');
+        }
+
+        function runPrime() {
+            const inputVal = parseInt(document.getElementById('prime-input').value, 10);
+            if (isNaN(inputVal)) {
+                updateResult('prime-result', "Error: Enter a valid integer", true);
+                return;
+            }
+            const res = isPrime(inputVal);
+            updateResult('prime-result', res ? "Prime Number (True)" : "Not Prime (False)");
+        }
+
+        function runFibonacci() {
+            const inputVal = parseInt(document.getElementById('fib-input').value, 10);
+            if (isNaN(inputVal) || inputVal <= 0) {
+                updateResult('fib-result', "Error: Enter a positive integer", true);
+                return;
+            }
+            const res = fibonacci(inputVal);
+            updateResult('fib-result', `[ ${res.join(', ')} ]`);
+        }
+
+        // Initialize with default values on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            runReverse();
+            runMax();
+            runFactorial();
+            runPrime();
+            runFibonacci();
+        });
+    </script>
+</body>
+</html>
